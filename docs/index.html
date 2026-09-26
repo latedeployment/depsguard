@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DepsGuard - Supply Chain Defense</title>
+  <title>DepsGuard - Guard your dependencies against supply chain attacks</title>
   <meta name="description"
     content="Guard your dependencies against supply chain attacks. Zero dependencies. One command.">
   <!-- Open Graph -->
@@ -14,9 +14,10 @@
   <meta property="og:description"
     content="One command to scan and fix npm, pnpm, yarn, bun, aube, uv, pip, and poetry configs for security best practices. Zero dependencies. MIT.">
   <meta property="og:image" content="https://depsguard.com/img/select.png">
+  <meta property="og:site_name" content="DepsGuard">
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="DepsGuard - Supply Chain Defense">
+  <meta name="twitter:title" content="DepsGuard - Guard your dependencies against supply chain attacks">
   <meta name="twitter:description"
     content="One command to scan and fix npm, pnpm, yarn, bun, aube, uv, pip, and poetry configs for security best practices. Zero dependencies. MIT.">
   <meta name="twitter:image" content="https://depsguard.com/img/select.png">
@@ -368,6 +369,123 @@
       display: inline-block;
     }
 
+    /* Share */
+    .nav-share {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      padding-left: .85rem;
+      border-left: 1px solid var(--border);
+    }
+
+    .share-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      background: none;
+      border: 0;
+      padding: 2px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: color .15s, transform .15s;
+    }
+
+    .share-btn:hover,
+    .share-btn:focus-visible {
+      color: var(--text);
+      transform: translateY(-1px);
+    }
+
+    .share-btn svg {
+      width: 17px;
+      height: 17px;
+      fill: currentColor;
+    }
+
+    .share-caption {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      width: 250px;
+      padding: .65rem .75rem;
+      font-family: var(--sans);
+      font-size: .75rem;
+      line-height: 1.45;
+      color: var(--text-dim);
+      background: var(--surface);
+      border: 1px solid var(--border-hi);
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+      opacity: 0;
+      transform: translateY(-4px);
+      pointer-events: none;
+      transition: opacity .15s, transform .15s;
+      z-index: 5;
+    }
+
+    /* Transparent bridge over the 10px gap so moving from the icons into the
+       caption (e.g. to click the link) doesn't drop the hover and close it */
+    .share-caption::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: -12px;
+      height: 12px;
+    }
+
+    .share-caption a {
+      display: inline;
+      color: var(--gold);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .share-nowrap {
+      white-space: nowrap;
+    }
+
+    .nav-share:hover .share-caption,
+    .nav-share:focus-within .share-caption {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .share-toast {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      padding: .35rem .6rem;
+      font-family: var(--sans);
+      font-size: .7rem;
+      font-weight: 600;
+      color: var(--text-strong);
+      background: var(--surface-2);
+      border: 1px solid var(--border-hi);
+      border-radius: 6px;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateY(-4px);
+      pointer-events: none;
+      transition: opacity .15s, transform .15s;
+      z-index: 6;
+    }
+
+    .share-toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* When the "copied" toast is showing, suppress the joke caption to avoid
+       overlap. Toggled via a class in JS rather than :has() for broader support. */
+    .nav-share.toast-active .share-caption {
+      opacity: 0;
+      pointer-events: none;
+    }
+
     @media (prefers-color-scheme: light) {
       .gh-star-count {
         background: rgba(175, 184, 193, .2);
@@ -404,6 +522,7 @@
     .hero-left {
       position: relative;
       z-index: 1;
+      min-width: 0;
     }
 
     .hero h1 {
@@ -496,6 +615,7 @@
     .hero-right {
       position: relative;
       z-index: 1;
+      min-width: 0;
     }
 
     .terminal-wrap {
@@ -503,6 +623,7 @@
       overflow: hidden;
       box-shadow: 0 25px 60px -12px rgba(0, 0, 0, .6);
       border: 1px solid var(--border);
+      max-width: 100%;
     }
 
     .terminal-chrome {
@@ -935,6 +1056,20 @@
         height: 14px;
       }
 
+      .nav-right {
+        gap: .5rem;
+      }
+
+      .nav-share {
+        gap: .2rem;
+        padding-left: .45rem;
+      }
+
+      .share-btn svg {
+        width: 15px;
+        height: 15px;
+      }
+
       .section {
         padding: 1.5rem 1rem;
       }
@@ -981,6 +1116,14 @@
 
       .footer-right {
         gap: .75rem;
+      }
+    }
+
+    /* Hide the GitHub star count only on the narrowest phones, where it would
+       push the five share icons off-screen. At >=390px there is room for it. */
+    @media (max-width:389px) {
+      .gh-star-count.visible {
+        display: none;
       }
     }
 
@@ -1100,7 +1243,135 @@
     .faq-list .faq-body li {
       margin-bottom: .35rem;
     }
+
+    /* ── Guides grid ─────────────────── */
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+
+    .guide-card {
+      display: block;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+      padding: 1rem 1.1rem;
+      transition: border-color .15s, transform .15s;
+    }
+
+    .guide-card:hover {
+      border-color: var(--text-mute);
+      transform: translateY(-2px);
+    }
+
+    .guide-card .gc-title {
+      display: block;
+      font-weight: 600;
+      color: var(--text-strong);
+      margin-bottom: .25rem;
+    }
+
+    .guide-card .gc-desc {
+      color: var(--text-dim);
+      font-size: .85rem;
+      line-height: 1.5;
+    }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "DepsGuard",
+    "description": "DepsGuard is a free, open-source command-line tool that scans your npm, pnpm, yarn, bun, aube, uv, pip, and poetry configuration and turns on the built-in security settings that protect against supply chain attacks, such as install-script blocking and version cooldowns.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "macOS, Linux, Windows",
+    "url": "https://depsguard.com/",
+    "downloadUrl": "https://depsguard.com/#install",
+    "softwareHelp": "https://depsguard.com/guide/",
+    "license": "https://github.com/arnica/depsguard/blob/main/LICENSE",
+    "isAccessibleForFree": true,
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "Arnica",
+      "url": "https://www.arnica.io/",
+      "logo": "https://depsguard.com/img/arnica-logo.svg"
+    },
+    "sameAs": [
+      "https://github.com/arnica/depsguard",
+      "https://crates.io/crates/depsguard"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is DepsGuard?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "DepsGuard is a free, open-source command-line tool that scans your npm, pnpm, yarn, bun, aube, uv, pip, and poetry configuration and turns on the built-in security settings that protect against supply chain attacks, such as install-script blocking and version cooldowns. It only edits config files you approve, and writes a backup before any change."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Will this protect against all supply chain attacks?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. DepsGuard focuses on one layer: delaying the adoption of brand-new package versions and disabling risky install scripts. It does not protect against compromised packages that go undetected for weeks, typosquatting, or attacks that do not involve publishing a new version."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How would this have helped during the axios compromise?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "On March 31, 2026, a compromised maintainer account published malicious versions of axios that were live for roughly 3 hours. A 7-day minimum release age (for example min-release-age=7 in .npmrc) would have refused to download the new version during that window."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why can this protect me against future attacks?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Many supply chain attacks follow the same pattern: an attacker publishes a poisoned version and relies on automated installs pulling it in before anyone notices. A minimum release age means your package manager won't install a version that hasn't been public for at least 7 days, giving that detection window time to work."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What's the difference between this and Software Composition Analysis (SCA)?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "SCA tools scan your existing dependencies for known vulnerabilities after installation. DepsGuard works before installation: it configures your package manager to avoid pulling in newly published versions until they have had time to be vetted. They are complementary."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What else can I do to protect myself?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Beyond package manager config: pin GitHub Actions by commit SHA instead of a tag; use npm ci, pnpm install --frozen-lockfile, or yarn install --immutable in CI; don't auto-merge Dependabot or Renovate PRs without reviewing changelogs, diffs, and provenance; and periodically audit your dependency tree with npm ls or pnpm why."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. DepsGuard is free and open source under the MIT license. The MIT license also permits commercial use, modification, and distribution."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 
 <body>
@@ -1119,9 +1390,6 @@
            |_|        |___/</span></a>
         <!-- prettier-ignore-end -->
         <div class="nav-right">
-          <a href="https://crates.io/crates/depsguard" title="Crates.io">
-            <img src="img/cargo.png" alt="Crates.io">
-          </a>
           <a href="https://github.com/arnica/depsguard" class="gh-star-widget" title="Star arnica/depsguard on GitHub">
             <svg class="gh-icon" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor">
               <path
@@ -1134,6 +1402,25 @@
             Star
             <span class="gh-star-count" id="gh-star-count"></span>
           </a>
+          <div class="nav-share" id="nav-share">
+            <button type="button" class="share-btn" id="share-native" aria-label="Share DepsGuard">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+            </button>
+            <a class="share-btn" href="https://twitter.com/intent/tweet?text=Friends%20don%27t%20let%20friends%20download%20malware%20from%20npm.%20DepsGuard%20guards%20your%20dependencies%20against%20supply-chain%20attacks.&amp;url=https%3A%2F%2Fdepsguard.com" aria-label="Post on X" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a class="share-btn" href="https://bsky.app/intent/compose?text=Friends%20don%27t%20let%20friends%20download%20malware%20from%20npm.%20DepsGuard%20guards%20your%20dependencies%20against%20supply-chain%20attacks.%20https%3A%2F%2Fdepsguard.com" aria-label="Share on Bluesky" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.297 5.568-.628 6.383-3.364.246-.828.624-5.79.624-6.479 0-.688-.139-1.86-.902-2.203-.659-.299-1.664-.621-4.3 1.24C16.046 4.748 13.087 8.687 12 10.8Z"/></svg>
+            </a>
+            <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fdepsguard.com" aria-label="Share on LinkedIn" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+            <a class="share-btn" href="https://news.ycombinator.com/submitlink?u=https%3A%2F%2Fdepsguard.com&amp;t=DepsGuard%20-%20Guard%20your%20dependencies%20against%20supply%20chain%20attacks" aria-label="Post to Hacker News" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M0 24V0h24v24H0zM6.951 5.896l4.112 7.708v5.064h1.583v-4.972l4.148-7.799h-1.749l-2.457 4.875c-.372.745-.688 1.434-.688 1.434s-.297-.708-.651-1.434L8.831 5.896h-1.88z"/></svg>
+            </a>
+            <span class="share-caption" role="note">Nobody clicks share buttons. But maybe you're the <span class="share-nowrap"><a href="https://ankursethi.com/links/nobody-clicks-your-share-buttons/" target="_blank" rel="noopener">0.2%</a>!</span> Friends don't let friends download malware from npm.</span>
+            <span class="share-toast" id="share-toast" aria-live="polite"></span>
+          </div>
         </div>
       </div>
     </nav>
@@ -1210,12 +1497,12 @@
         </div>
         <div data-panel="macos" id="panel-macos" role="tabpanel" aria-labelledby="tab-macos" class="install-panel">
           <div class="code-wrap install-code-wrap"
-            data-copy="brew tap arnica/depsguard https://github.com/arnica/depsguard&#10;brew install depsguard">
+            data-copy="brew install depsguard">
             <button type="button" class="copy-btn install-copy-btn" aria-label="Copy install command">Copy</button>
-            <pre tabindex="0"><code>brew tap arnica/depsguard https://github.com/arnica/depsguard
-brew install depsguard</code></pre>
+            <pre tabindex="0"><code>brew install depsguard</code></pre>
           </div>
-          <p class="code-note">Homebrew tap. Works on Apple Silicon and Intel.</p>
+          <p class="code-note">Homebrew (in homebrew-core &ndash; no tap needed). Works on Apple Silicon and Intel.
+            Update later with <code>brew upgrade depsguard</code>.</p>
         </div>
         <div data-panel="linux" id="panel-linux" role="tabpanel" aria-labelledby="tab-linux" class="install-panel"
           style="display:none">
@@ -1230,7 +1517,8 @@ sudo apt update
 sudo apt install depsguard</code></pre>
           </div>
           <p class="code-note">Debian/Ubuntu via APT. Also available via <a
-              href="https://github.com/arnica/depsguard#install">Homebrew on Linux</a>.</p>
+              href="https://github.com/arnica/depsguard#install">Homebrew on Linux</a>.
+            Update later with <code>sudo apt update &amp;&amp; sudo apt install --only-upgrade depsguard</code>.</p>
         </div>
         <div data-panel="windows" id="panel-windows" role="tabpanel" aria-labelledby="tab-windows" class="install-panel"
           style="display:none">
@@ -1246,6 +1534,8 @@ sudo apt install depsguard</code></pre>
             <pre tabindex="0"><code>scoop bucket add depsguard https://github.com/arnica/depsguard
 scoop install depsguard</code></pre>
           </div>
+          <p class="code-note">Update later with <code>winget upgrade Arnica.DepsGuard</code> or
+            <code>scoop update depsguard</code>.</p>
         </div>
         <div data-panel="cargo" id="panel-cargo" role="tabpanel" aria-labelledby="tab-cargo" class="install-panel"
           style="display:none">
@@ -1253,7 +1543,8 @@ scoop install depsguard</code></pre>
             <button type="button" class="copy-btn install-copy-btn" aria-label="Copy install command">Copy</button>
             <pre tabindex="0"><code>cargo install depsguard</code></pre>
           </div>
-          <p class="code-note">Requires a <a href="https://rustup.rs/">Rust toolchain</a> (1.74+).</p>
+          <p class="code-note">Requires a <a href="https://rustup.rs/">Rust toolchain</a> (1.74+).
+            Run <code>cargo install --force depsguard</code> to upgrade to the latest release.</p>
         </div>
       </div>
       <p class="install-also">
@@ -1315,12 +1606,17 @@ scoop install depsguard</code></pre>
         <code style="color:var(--text-dim)">ua-parser-js</code>,
         <code style="color:var(--text-dim)">colors</code>, and
         <code style="color:var(--text-dim)">node-ipc</code>.
+        Bigger campaigns followed: the self-replicating <a href="/shai-hulud/" class="body-link">Shai-Hulud</a> worm
+        spread through hundreds of npm packages in 2025, and in May&nbsp;2026 attackers poisoned dozens of
+        <a href="/tanstack-npm-attack/" class="body-link">TanStack</a> packages through a compromised CI pipeline.
         The pattern is the same: an attacker publishes a poisoned version, and every <code
           style="color:var(--text-dim)">npm install</code> that runs before it's caught pulls it in.
       </p>
       <p style="color:var(--text-dim); margin-bottom:2.5rem; line-height:1.75;">
-        Many modern package managers now ship with built-in defenses, but they&rsquo;re not always enabled by default.
-        DepsGuard checks whether those settings are enabled and helps you turn them on.
+        Many modern package managers now ship with built-in defenses, and some are on by default: pnpm 11 enables a
+        24-hour cooldown and blocks exotic transitive dependencies, and npm v12 (expected in 2026) will block install
+        scripts and git or remote-URL dependencies by default. But the defaults vary by version and are often weaker
+        than they should be, so DepsGuard checks what is actually enabled and helps you turn on, or strengthen, the rest.
       </p>
 
       <h2>Supported settings</h2>
@@ -1387,7 +1683,7 @@ scoop install depsguard</code></pre>
               <td><code>minimum-release-age=10080</code></td>
               <td>Delay new versions by 7 days (in minutes) <span
                   style="color:var(--text-mute); font-size:.75rem;">(pnpm 10.16–10.x; pnpm &ge; 11 ignores
-                  <code>.npmrc</code> — use <code>pnpm-workspace.yaml</code>)</span></td>
+                  <code>.npmrc</code>; use <code>pnpm-workspace.yaml</code>)</span></td>
               <td><a class="doc-link" href="https://pnpm.io/settings#minimumreleaseage"
                   target="_blank" rel="noopener" title="pnpm docs"><svg viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1791,7 +2087,7 @@ scoop install depsguard</code></pre>
                     d="M25.105 65.52V26.512H40.96c8.72 0 26.274.034 39.008.075l23.153.075v77.866H83.645v-58.54H64.057v58.54H25.105z" />
                 </svg> npm</td>
               <td colspan="3" style="text-align:center;"><code>~/.npmrc</code></td>
-              <td style="color:var(--text-mute);">&mdash;</td>
+              <td style="color:var(--text-mute);">n/a</td>
             </tr>
             <tr>
               <td class="mgr-name"><svg class="mgr-icon" viewBox="0 0 32 32">
@@ -1799,7 +2095,7 @@ scoop install depsguard</code></pre>
                   <path fill="#ffb300" d="M2 2h8v8H2zm10 0h8v8h-8zm10 0h8v8h-8zm0 10h8v8h-8z" />
                 </svg> pnpm</td>
               <td colspan="3" style="text-align:center;"><code>~/.npmrc</code> <span style="color:var(--text-mute); font-size:.75rem;">(shared with npm)</span></td>
-              <td style="color:var(--text-mute);">&mdash;</td>
+              <td style="color:var(--text-mute);">n/a</td>
             </tr>
             <tr>
               <td class="mgr-name"><svg class="mgr-icon" viewBox="0 0 24 24">
@@ -1808,7 +2104,7 @@ scoop install depsguard</code></pre>
                     d="M3 16.5h18M12 3.5V5M5 6.5l1 1M19 6.5l-1 1" />
                 </svg> aube</td>
               <td colspan="3" style="text-align:center;"><code>~/.npmrc</code> <span style="color:var(--text-mute); font-size:.75rem;">(shared with npm)</span></td>
-              <td style="color:var(--text-mute);">&mdash;</td>
+              <td style="color:var(--text-mute);">n/a</td>
             </tr>
             <tr>
               <td class="mgr-name"><svg class="mgr-icon" viewBox="0 0 32 32">
@@ -1835,7 +2131,7 @@ scoop install depsguard</code></pre>
                   src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='24'%20height='24'%20viewBox='0%200%2032%2032'%3E%3Cpath%20fill='%230288d1'%20d='M27.575%2023.967a9.9%209.9%200%200%200-3.751%201.726a22.6%2022.6%200%200%201-5.537%202.504a1.55%201.55%200%200%201-.931.52a59%2059%200%200%201-6.11.548c-1.102.008-1.777-.282-1.965-.735a1.49%201.49%200%200%201%20.82-1.965a3.6%203.6%200%200%201-.486-.359c-.163-.162-.334-.487-.385-.367c-.213.52-.324%201.794-.897%202.366c-.786.795-2.273.53-3.153.069c-.965-.513.069-1.718.069-1.718a.69.69%200%200%201-.94-.324a4.6%204.6%200%200%201-.632-2.794a5.2%205.2%200%200%201%201.674-2.76a8.84%208.84%200%200%201%20.624-4.17a9.9%209.9%200%200%201%203-3.469S7.136%2011.015%207.82%209.177c.444-1.196.623-1.187.769-1.239a3.44%203.44%200%200%200%201.375-.811a4.99%204.99%200%200%201%204.178-1.607s1.094-3.357%202.12-2.7a17.4%2017.4%200%200%201%201.452%202.735s1.213-.71%201.35-.445a10.74%2010.74%200%200%201%20.495%205.81a13.3%2013.3%200%200%201-2.46%205.127c-.129.214%201.47.889%202.477%203.683c.932%202.554.103%204.699.248%204.938c.026.043.034.06.034.06s1.068.085%203.213-1.24a8.05%208.05%200%200%201%204.05-1.52a1.026%201.026%200%200%201%20.453%202Z'/%3E%3C/svg%3E"
                   alt=""> Yarn</td>
               <td colspan="3" style="text-align:center;"><code>~/.yarnrc.yml</code></td>
-              <td style="color:var(--text-mute);">&mdash;</td>
+              <td style="color:var(--text-mute);">n/a</td>
             </tr>
             <tr>
               <td class="mgr-name"><svg class="mgr-icon" viewBox="0 0 256 225">
@@ -1902,7 +2198,7 @@ scoop install depsguard</code></pre>
           </tbody>
         </table>
         <p style="margin:.65rem .85rem .65rem; color:var(--text-mute); font-size:.75rem; line-height:1.55;">
-          <sup>*</sup> When <code>$XDG_CONFIG_HOME</code> is set, DepsGuard prefers the XDG path. For bun, each existing config file is scanned independently. For pip, uv, and poetry, it resolves a single effective config &mdash; pip/poetry use the highest-precedence file that sets the value, and uv reads the XDG file in place of <code>~/.config</code> (it does not merge both).
+          <sup>*</sup> When <code>$XDG_CONFIG_HOME</code> is set, DepsGuard prefers the XDG path. For bun, each existing config file is scanned independently. For pip, uv, and poetry, it resolves a single effective config: pip/poetry use the highest-precedence file that sets the value, and uv reads the XDG file in place of <code>~/.config</code> (it does not merge both).
           If no config exists, the XDG path is used as the default for new fixes.
         </p>
         </div>
@@ -2062,9 +2358,65 @@ scoop install depsguard</code></pre>
     </section>
 
     <!-- FAQ -->
+    <!-- Guides -->
+    <section class="section section-border scroll-mt" id="guides">
+      <h2>Guides &amp; deep dives</h2>
+      <p style="color:var(--text-dim); margin-bottom:1.5rem; line-height:1.75;">
+        Detailed explanations of each hardening setting and the supply chain attacks they defend against.
+      </p>
+      <div class="guide-grid">
+        <a class="guide-card" href="/guide/">
+          <span class="gc-title">How to protect against npm supply chain attacks</span>
+          <span class="gc-desc">The full hardening guide: every setting and incident in one place.</span>
+        </a>
+        <a class="guide-card" href="/cooldown/">
+          <span class="gc-title">Dependency cooldown</span>
+          <span class="gc-desc">Delay brand-new versions (min-release-age) so poisoned releases are pulled first.</span>
+        </a>
+        <a class="guide-card" href="/ignore-scripts/">
+          <span class="gc-title">Block install scripts</span>
+          <span class="gc-desc">Stop malicious preinstall/postinstall scripts from running automatically.</span>
+        </a>
+        <a class="guide-card" href="/block-exotic-subdeps/">
+          <span class="gc-title">Block exotic transitive deps</span>
+          <span class="gc-desc">Block transitive dependencies from non-registry sources (pnpm).</span>
+        </a>
+        <a class="guide-card" href="/strict-dep-builds/">
+          <span class="gc-title">Fail on unreviewed builds</span>
+          <span class="gc-desc">Make installs fail on dependency build scripts you haven't approved (pnpm).</span>
+        </a>
+        <a class="guide-card" href="/trust-policy/">
+          <span class="gc-title">Block provenance downgrades</span>
+          <span class="gc-desc">Refuse versions that weaken package provenance (pnpm).</span>
+        </a>
+        <a class="guide-card" href="/axios-npm-attack/">
+          <span class="gc-title">The axios npm attack</span>
+          <span class="gc-desc">March 2026: malicious axios versions live for ~3 hours, and how to prevent it.</span>
+        </a>
+        <a class="guide-card" href="/shai-hulud/">
+          <span class="gc-title">Shai-Hulud npm worm</span>
+          <span class="gc-desc">The self-replicating 2025 campaign across hundreds of packages.</span>
+        </a>
+        <a class="guide-card" href="/tanstack-npm-attack/">
+          <span class="gc-title">The TanStack npm attack</span>
+          <span class="gc-desc">May 2026: 42 Router/Start packages poisoned via CI cache poisoning.</span>
+        </a>
+      </div>
+    </section>
+
     <section class="section section-border scroll-mt" id="faq">
       <h2>FAQ</h2>
       <div class="faq-list">
+
+        <div class="faq-item">
+          <h3 class="faq-q">What is DepsGuard?</h3>
+          <div class="faq-body">
+            <p>DepsGuard is a free, open-source command-line tool that scans your npm, pnpm, yarn, bun, aube, uv, pip,
+              and poetry configuration and turns on the built-in security settings that protect against supply chain
+              attacks, such as install-script blocking and version cooldowns. It never runs installs; it only
+              edits config files you approve, and it writes a backup before any change.</p>
+          </div>
+        </div>
 
         <div class="faq-item">
           <h3 class="faq-q">Will this protect against all supply chain attacks?</h3>
@@ -2136,6 +2488,21 @@ scoop install depsguard</code></pre>
         </div>
 
         <div class="faq-item">
+          <h3 class="faq-q">What should I do if I need to patch an urgent CVE?</h3>
+          <div class="faq-body">
+            <p>If the patched version is newer than your cooldown window, your package manager will refuse to install it
+              by default &ndash; that's the cooldown doing its job. To get the fix in, add a <strong>narrow,
+              package-specific exception</strong>, install the patched version, then remove the exception so the delay
+              stays in place for every other dependency. Prefer a per-package override to lowering the global cooldown.</p>
+            <p>Before you bypass the cooldown: confirm the CVE actually affects how you use the package, and check whether
+              a known-good older version is already available (a rollback may be safer). See the <a
+                href="#urgent-cve">Urgent security fix</a> section for the exact per-manager commands (npm, pnpm,
+              yarn, bun, aube, uv, pip, poetry, Renovate, Dependabot). Note that Renovate and Dependabot
+              <em>security</em> updates already bypass the cooldown automatically.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
           <h3 class="faq-q">Is this free?</h3>
           <div class="faq-body">
             <p>Yes. DepsGuard is free and open source under the <a
@@ -2184,19 +2551,6 @@ scoop install depsguard</code></pre>
         <code style="color:var(--text-dim)">trust-policy</code>,
         <code style="color:var(--text-dim)">strict-dep-builds</code>)
         with an interactive TUI, diff preview, and backup/restore.
-      </p>
-      <p style="color:var(--text-dim); line-height:1.75; margin-top:1rem;">
-        <strong>Python ecosystem:</strong> DepsGuard scans the package managers that expose a release-age cooldown as a
-        persistent config setting &ndash; <code style="color:var(--text-dim)">uv</code>
-        (<code style="color:var(--text-dim)">exclude-newer</code>), <code style="color:var(--text-dim)">pip</code>
-        (<code style="color:var(--text-dim)">uploaded-prior-to</code>, pip &ge; 26.1), and
-        <code style="color:var(--text-dim)">poetry</code> (<code style="color:var(--text-dim)">solver.min-release-age</code>,
-        poetry &ge; 2.4). <code style="color:var(--text-dim)">pdm</code> and <code style="color:var(--text-dim)">conda</code>
-        currently expose release-age only via one-off CLI flags / unreleased proposals, and
-        <code style="color:var(--text-dim)">pixi</code>'s <code style="color:var(--text-dim)">exclude-newer</code> is
-        project-scoped (no user-level config); these may be added later.
-        <code style="color:var(--text-dim)">pipenv</code> and <code style="color:var(--text-dim)">hatch</code> have no
-        cooldown setting yet.
       </p>
     </section>
 
@@ -2355,16 +2709,74 @@ scoop install depsguard</code></pre>
 
   <script>
     (function () {
-      var el = document.getElementById('gh-star-count');
-      if (!el) return;
-      fetch('https://api.github.com/repos/arnica/depsguard')
-        .then(function (r) { return r.json(); })
-        .then(function (d) {
-          if (d.stargazers_count != null) { el.textContent = d.stargazers_count; el.classList.add('visible'); }
-        })
-        .catch(function () { });
+      var btn = document.getElementById('share-native');
+      if (!btn) return;
+      var navShare = document.getElementById('nav-share');
+      var toast = document.getElementById('share-toast');
+      var toastTimer;
+      var canShare = typeof navigator !== 'undefined'
+        && typeof navigator.share === 'function'
+        && window.isSecureContext;
+
+      if (!canShare) {
+        btn.setAttribute('aria-label', 'Copy link to clipboard');
+      }
+
+      function showToast(msg) {
+        if (!toast) return;
+        toast.textContent = msg;
+        toast.classList.add('show');
+        if (navShare) navShare.classList.add('toast-active');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () {
+          toast.classList.remove('show');
+          if (navShare) navShare.classList.remove('toast-active');
+        }, 1600);
+      }
+
+      function legacyCopy(text) {
+        var ok = false;
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.setAttribute('readonly', '');
+          ta.style.position = 'absolute';
+          ta.style.left = '-9999px';
+          document.body.appendChild(ta);
+          ta.select();
+          ok = document.execCommand('copy');
+          document.body.removeChild(ta);
+        } catch (e) {
+          ok = false;
+        }
+        showToast(ok ? 'Link copied!' : 'Copy failed');
+      }
+
+      function copyLink(url) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url)
+            .then(function () { showToast('Link copied!'); })
+            .catch(function () { legacyCopy(url); });
+        } else {
+          legacyCopy(url);
+        }
+      }
+
+      btn.addEventListener('click', function () {
+        var url = location.href;
+        if (canShare) {
+          navigator.share({ title: document.title, url: url }).catch(function (err) {
+            // Dismissing the native share sheet rejects with AbortError; only fall
+            // back to copying on genuine failures, not deliberate cancellation.
+            if (!err || err.name !== 'AbortError') copyLink(url);
+          });
+          return;
+        }
+        copyLink(url);
+      });
     })();
   </script>
+  <script src="/site.js"></script>
   <script>
     (function () {
       var host = location.hostname;
@@ -2390,6 +2802,59 @@ scoop install depsguard</code></pre>
       });
       var timer = document.querySelector('.ap-timer');
       if (timer) timer.setAttribute('aria-label', 'Playback time');
+    })();
+  </script>
+  <script>
+    /* GA4 interaction events via click delegation (non-invasive; no-op if gtag is blocked) */
+    (function () {
+      function track(name, params) {
+        if (typeof window.gtag === 'function') { window.gtag('event', name, params || {}); }
+      }
+      var SHARE_METHOD = {
+        'Post on X': 'x',
+        'Share on Bluesky': 'bluesky',
+        'Share on LinkedIn': 'linkedin',
+        'Post to Hacker News': 'hacker_news'
+      };
+      function managerFromCopy(text) {
+        if (!text) return 'other';
+        if (text.indexOf('brew') > -1) return 'homebrew';
+        if (text.indexOf('winget') > -1) return 'winget';
+        if (text.indexOf('scoop') > -1) return 'scoop';
+        if (text.indexOf('cargo') > -1) return 'cargo';
+        if (text.indexOf('apt') > -1) return 'apt';
+        return 'other';
+      }
+      document.addEventListener('click', function (e) {
+        var t = e.target;
+        if (!t || !t.closest) return;
+        if (t.closest('#share-native')) {
+          var canShare = typeof navigator.share === 'function' && window.isSecureContext;
+          track('share', { method: canShare ? 'native' : 'copy_link', content_type: 'website' });
+          return;
+        }
+        var shareLink = t.closest('.nav-share a[aria-label]');
+        if (shareLink) {
+          var m = SHARE_METHOD[shareLink.getAttribute('aria-label')];
+          if (m) track('share', { method: m, content_type: 'website' });
+          return;
+        }
+        var plat = t.closest('.install-btn[data-activate-tab]');
+        if (plat) {
+          track('install_select', { platform: plat.getAttribute('data-activate-tab') });
+          return;
+        }
+        var copy = t.closest('.install-copy-btn');
+        if (copy) {
+          var wrap = copy.closest('.install-code-wrap');
+          track('copy_install_command', { manager: managerFromCopy(wrap && wrap.getAttribute('data-copy')) });
+          return;
+        }
+        if (t.closest('.gh-star-widget')) {
+          track('outbound_click', { target: 'github_star' });
+          return;
+        }
+      }, true);
     })();
   </script>
 </body>
